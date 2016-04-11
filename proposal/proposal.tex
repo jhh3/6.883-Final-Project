@@ -2,6 +2,7 @@
 \usepackage{enumerate}
 \usepackage{calc}
 
+\usepackage{hyperref}
 \usepackage[T1]{fontenc}
 \usepackage[top=1.0in, bottom=1.0in, left=1.0in, right=1.0in]{geometry}
 \pagenumbering{gobble}
@@ -16,64 +17,40 @@
 
 \begin{center}
 {\Large\bf 6.883 Final Project Proposal:} \\[1ex]
-{\Large\bf Incremental Random Forest Classifiers in Spark ML} \\[1ex]
-{\large Katie Siegel (ksiegel@mit.edu) \\ \large John Holliman (holliman@mit.edu)}
+{\Large\bf Mind-Reading Machine++} \\[1ex]
+{\large John Holliman (holliman@mit.edu)}
 \end{center}
 
 \vspace{-12pt}
 \noindent\makebox[\linewidth]{\rule{\textwidth}{1pt}}
 \vspace{3pt}
 
-\noindent
-Random forests have become one of the most popular machine learning classifiers
-due to their robustness to noisy data, accuracy, and ability to handle big data
-workloads. At a high level, random forests are collections of decision trees
-used for classification. Once grown, each decision tree classifies an unlabeled
-point by casting a vote, and the random forest reports the label with the most
-votes. 
+\section*{Overview}
 
-The downside to using random forests is that, given additional training data,
-the random forest must be regrown from scratch. This project will explore several
-techniques for updating a random forest incrementally without fully regrowing
-the classifier, and will  provide insight into the performance and robustness
-of these techniques on different workloads. Specifically, we will develop a
-custom incremental random forest classifier in Spark and provide a Scala API
-through which users can call incremental random forest methods.
+In the 1950's, as described in lecture 1 of class, David Hagelbarger and Claude
+Shannon built the first "mind reading" machines to play the game of matching
+pennies \cite{Hag56, Sha53}.  Rumor has it that Shannon's bot beat
+Hagelbarger's 55 to 45. A modern version of a "mind reading" machine
+(\url{http://www.mindreaderpro.appspot.com}) was produced by Professor Yoav
+Freund and his colleagues at UC Berkeley. Professor Freund's machine uses
+hedging algorithms and context-weighted trees.
 
-\section{Batched Workflows}
+In this project, I will produce my own "mind reading" machine that explores
+using expert's advice, as described on
+\url{http://www.mindreaderpro.appspot.com/about} as future work.
 
-A common pattern in data science workflows involves training the same model on
-increasing amounts of data. Such workloads are common in analytics, where
-observations are continuously collected in log entries, as well as in Internet
-of Things (IoT) networks, where extensive data collection takes place offline
-and data is transmitted periodically. Existing machine learning tools retrain a
-model on the entire dataset when new data is added. This involves reiterating
-over every single data point in the dataset, even when the added batch has a
-minimal effect on the resulting classifier. As such, implementing incremental
-training in Spark random forests should drastically improve the performance of
-these classifiers on batched workloads.
+In short, I would like to:
+\begin{enumerate}
+	\item Familiarize myself with the relevant past and current work \cite{Hag56,
+		Sha53, Willems95, CB97} on predicting sequences of bits
+	\item Implement various `experts' and combine them into a single predictor
+	\item Compare my implementation against those of Hagelbarger, Shannon, and Freund.
+\end{enumerate}
 
-\section{Spark Random Forest Classifiers}
+\medskip
 
-This project involves the Spark Machine Learning (ML) implementation of random
-forest classifiers. Apache Spark is a scalable system developed at Berkeley
-that provides an engine for processing big data workloads. At its core is a
-structure called the resilient distributed dataset (RDD), which can be
-distributed over a cluster of machines and is fault-tolerant. A series of
-powerful libraries run on Spark and take advantage of its powerful
-cluster-computing capabilities. One such library is Spark MLlib, which contains
-a wide array of machine learning tools. In this project, we will model my
-incremental random forest classifier on the Spark random forest classifier, for
-the purposes of maintaining optimizations within the codebase that take
-advantage of Spark's strengths. Since each batch in a batched workload may be
-large, implementing an incremental classifier in Spark allows us to take
-advantage of Spark's distributed computing capabilities for every batch.
-
-The existing Spark ML random forest classifier performs well given a large
-dataset. However, like all implementations of random forests, a change in the
-training dataset would mean retraining the random forest from scratch. An
-incremental implementation would allow random forest classifiers to be updated
-with each new batch of training data more efficiently, therefore saving time
-for data scientists and other users of Spark MLlib.
+% references section
+\bibliographystyle{unsrt}
+\bibliography{sources}
 
 \end{document}
