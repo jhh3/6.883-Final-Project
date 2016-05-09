@@ -39,8 +39,6 @@ class MindReader(object):
         else:
             self.prediction = self.flip()
 
-        print self.prediction
-
 if __name__ == "__main__":
     import curses
     mr_machine = MindReader()

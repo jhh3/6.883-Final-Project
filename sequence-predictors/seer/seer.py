@@ -29,7 +29,6 @@ class SEER(object):
 
     def take_turn(self, player_input):
         cur_state = self.state[self.last_play][self.last_last_play]
-        print cur_state
         if player_input == self.prediction:
             self.computer_score += 1
             if self.prediction == cur_state[2]:
@@ -49,7 +48,6 @@ class SEER(object):
 
         # Make next prediction
         advice = self.state[self.last_play][self.last_last_play]
-        print advice
         lost_streak = advice[0] + advice[1]
         self.last_prediction = self.prediction
         if lost_streak == 0:
