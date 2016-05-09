@@ -15,16 +15,13 @@ shannon_results_john = []
 hagel_results_john = []
 
 for r in xrange(rounds):
-    # Performance of Shannon's bot
+    # Performance of bots
     shannon_bot = MindReader()
-    for human_guess in data:
-        shannon_bot.take_turn(human_guess)
-    shannon_results_john.append(shannon_bot.computer_score / (1.0 + len(data)))
-
-    # Performance of Hagelbarger's bot
     hagel_bot = SEER()
     for human_guess in data:
+        shannon_bot.take_turn(human_guess)
         hagel_bot.take_turn(human_guess)
+    shannon_results_john.append(shannon_bot.computer_score / (1.0 + len(data)))
     hagel_results_john.append(hagel_bot.computer_score / (1.0 + len(data)))
 
 means_john = []
