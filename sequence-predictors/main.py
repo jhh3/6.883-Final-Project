@@ -10,7 +10,7 @@ with open(john_data_path, 'r') as f:
 
 # Run trials to compute average bot performance
 # Record bot score / total runs in results
-rounds = 100
+rounds = 10
 shannon_results_john = []
 hagel_results_john = []
 
@@ -19,14 +19,12 @@ for r in xrange(rounds):
     shannon_bot = MindReader()
     for human_guess in data:
         shannon_bot.take_turn(human_guess)
-    print shannon_bot.score()
     shannon_results_john.append(shannon_bot.computer_score / (1.0 + len(data)))
 
     # Performance of Hagelbarger's bot
     hagel_bot = SEER()
     for human_guess in data:
         hagel_bot.take_turn(human_guess)
-    print hagel_bot.score()
     hagel_results_john.append(hagel_bot.computer_score / (1.0 + len(data)))
 
 means_john = []
@@ -53,7 +51,7 @@ rect_john = ax.bar(ind, means_john,
 
 axes = plt.gca()
 axes.set_ylim([0, 1.1])
-axes.set_xlim([-0.6, 2])
+axes.set_xlim([-bar_width, nbots - 1 + 2 * bar_width])
 
 ax.set_ylabel('Score (computer score / total predictions)')
 ax.set_title('Bot sequence prediction scores')
@@ -64,6 +62,7 @@ ax.legend((rect_john[0], ), ('John\'s Data', ))
 
 
 def auto_label(rects):
+    """Label bars"""
     for rect in rects:
         height = rect.get_height()
         ax.text(rect.get_x() + rect.get_width() / 2., 1.05 * height, "%.2f" %
