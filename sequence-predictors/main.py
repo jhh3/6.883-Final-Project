@@ -23,7 +23,7 @@ for r in xrange(rounds):
     shannon_bot = MindReader()
     hagel_bot = SEER()
     expert_bot = ExpertsCombo([MindReader(), SEER()])
-    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.8)
+    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.9)
     for human_guess in data:
         shannon_bot.take_turn(human_guess)
         hagel_bot.take_turn(human_guess)
@@ -40,10 +40,10 @@ means_john.append(np.mean(hagel_results_john))
 means_john.append(np.mean(expert_results_john))
 means_john.append(np.mean(expert_ema_results_john))
 stds_john = []
-stds_john.append(np.std(shannon_results_john))
-stds_john.append(np.std(hagel_results_john))
-stds_john.append(np.std(expert_results_john))
-stds_john.append(np.std(expert_ema_results_john))
+stds_john.append(2 * np.std(shannon_results_john))
+stds_john.append(2 * np.std(hagel_results_john))
+stds_john.append(2 * np.std(expert_results_john))
+stds_john.append(2 * np.std(expert_ema_results_john))
 
 
 # Plot bar graph of bot performance
@@ -67,7 +67,7 @@ axes.set_xlim([-bar_width, nbots - 1 + 2 * bar_width])
 ax.set_ylabel('Score (computer score / total predictions)')
 ax.set_title('Bot sequence prediction scores')
 ax.set_xticks(ind + bar_width / 2)
-ax.set_xticklabels(('Shannon', 'Hagelbarger', 'Experts Combo', 'Experts Combo (EMA)'))
+ax.set_xticklabels(('Shannon', 'Hagelbarger', 'Experts', 'Experts (EMA)'))
 
 ax.legend((rect_john[0], ), ('John\'s Data', ))
 
