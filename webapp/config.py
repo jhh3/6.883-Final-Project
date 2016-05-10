@@ -11,6 +11,9 @@ class BaseConfig:
     # Admins
     ADMINS = frozenset(['me@jhh3.net'])
 
+    # Session
+    SESSION_TYPE = 'filesystem'
+
 
 class DevelopmentConfig(BaseConfig):
     NAME = "dev"
@@ -19,6 +22,7 @@ class DevelopmentConfig(BaseConfig):
     # Use a secure, unique and absolutely secret key for signing the data.
     CSRF_ENABLED = True
     CSRF_SESSION_KEY = "secret"
+    SECRET_KEY = "supersecret"
 
 
 class AWSProductionConfig(BaseConfig):

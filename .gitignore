@@ -193,3 +193,4 @@ TSWLatexianTemp*
 
 # KBibTeX
 *~[0-9]*
+webapp/flask_session

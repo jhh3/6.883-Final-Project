@@ -6,7 +6,7 @@ from flask.ext.session import Session
 # Define the WSGI application object.
 # ---------------------------------------------------------------------------
 app = Flask(__name__)
-Session(app)
+sess = Session()
 
 # ---------------------------------------------------------------------------
 # Configuration.
@@ -15,6 +15,8 @@ if os.environ.get('AWS_ENV') == 'prod':
     app.config.from_object('config.AWSProductionConfig')
 else:
     app.config.from_object('config.DevelopmentConfig')
+
+sess.init_app(app)
 
 # ---------------------------------------------------------------------------
 # Enable logging in production.
