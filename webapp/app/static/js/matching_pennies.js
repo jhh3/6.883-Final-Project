@@ -29,9 +29,9 @@ $(document).ready(function() {
 			$("#cscore").text(resp.computer_score);	
 			$("#pscore").text(resp.player_score);	
 			if (resp.won) {
-				$("#red-car").animate({left: "+=10"}, 10);
+				$("#red-car").animate({left: "+=10"}, 0);
 			} else {
-				$("#green-car").animate({left: "+=10"}, 10);
+				$("#green-car").animate({left: "+=10"}, 0);
 			}
 			if (resp.computer_score == 50 || resp.player_score == 50) {
 				add_to_history(resp.computer_score, resp.player_score, resp.won)
