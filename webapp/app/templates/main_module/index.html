@@ -1,20 +1,37 @@
-<html>
+<html lang="en">
 	<head>
+    <meta charset="utf-8">
 		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-		<script src="{{ url_for('static', filename='js/matching_pennies.js') }}"></script>
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <title>6.883 Final Project</title>
 	</head>
 	<body>
-		<h1>BIT SEQUENCE PREDICTION</h1>
-		<p>Press the left arrow key for 0 and the right arrow key for 1.</p>
-		<div id="cscore">Computer score: </div></br>
-		<div id="pscore">Player score: </div></br>
-		<div id="last-action">Entered: </div>
-			<div style="position:relative;">
-				<img style="position:absolute;left:575;height:100;" id="finish" src="{{ url_for('static', filename='images/finish.png') }}">
-				<img style="position:absolute;width:575px;height:100;" id="finish" src="{{ url_for('static', filename='images/road.png') }}">
-				<img style="position:absolute;height:34;width:75;top:12" id="red-car" src="{{ url_for('static', filename='images/red-car.gif') }}">
-				<img style="position:absolute;top:56;height:34;width:75;" id="green-car" src="{{ url_for('static', filename='images/green-car.gif') }}">
+		<div id="layout">
+			<div id="main">
+				<div class="header">
+					<h1>MIT 6.883 Final Project</h1>
+					<h2>Matching Pennies with Experts</h2>
+				</div>
+
+				<div class="content">
+					<h2 class="content-subhead">About</h2>
+						<div id="play-button-div">
+							<p>Click below to play now.</p>
+							<a id="play-button" class="pure-button" href="{{ url_for('main.play_game') }}">Play!</a>
+						</div>
+
+					<h2 class="content-subhead">History</h2>
+					<p>
+						TODO
+					</p>
+
+					<h2 class="content-subhead">Contact Us</h2>
+					<p>
+						TODO
+					</p>
+				</div>
 			</div>
+		</div>
 	</body>
 </html>

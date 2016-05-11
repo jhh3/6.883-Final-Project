@@ -16,6 +16,11 @@ def index():
     return render_template("main_module/index.html")
 
 
+@mod.route('/play')
+def play_game():
+    return render_template("main_module/play.html")
+
+
 @mod.route('/game-over', methods=['POST'])
 def game_over():
     session['penny_bot'] = MindReader()
@@ -24,17 +29,15 @@ def game_over():
 
 @mod.route('/take-turn', methods=['GET'])
 def take_turn():
+    # Map right arrow key (39) to a 1
     action = int('39' == request.args.get('action'))
+    # Get bot
     bot = session.get('penny_bot', False)
     if not bot:
         bot = session['penny_bot'] = MindReader()
     prev_computer_score = bot.computer_score
-    print prev_computer_score
-    print action
     bot.take_turn(action)
-    print bot.computer_score
     result = {'computer_score': bot.computer_score,
               'player_score': bot.player_score,
               'won': prev_computer_score < bot.computer_score}
-    print result
     return jsonify(**result)
