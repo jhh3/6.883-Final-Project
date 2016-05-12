@@ -9,12 +9,12 @@ from perceptron_algorithm.perceptron import Perceptron
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-import random
 
 # Read in data
 saya_data_path = "../data/saya_data.txt"
 john_data_path = "../data/john.data"
 john_text_path = "../data/text_data.txt"
+fin_data_path = "../data/sp500close01.data"
 fin_data_path = "../data/sp500close01.data"
 with open(john_data_path, 'r') as f:
     data = [int(c) for c in f.read().replace('\n', '')]
@@ -61,6 +61,11 @@ for r in xrange(rounds):
     expert_ema_bot = ExpertsEMA([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)], 0.9)
     i = 0
     num_predictions = []
+    cwt_bot = CWT_Expert(3, 5)
+    perc_bot = Perceptron(3, 0.1)
+    expert_bot = ExpertsCombo([MindReader(), SEER(), CWT_Expert(3, 5), Perceptron(3, 0.1)])
+    expert_ema_bot = ExpertsEMA([MindReader(), SEER(), CWT_Expert(3, 5), Perceptron(3, 0.1)], 0.9)
+
     for human_guess in data:
         shannon_bot.take_turn(human_guess)
         hagel_bot.take_turn(human_guess)
@@ -68,6 +73,7 @@ for r in xrange(rounds):
         expert_ema_bot.take_turn(human_guess)
         cwt_bot.take_turn(human_guess)
         perc_bot.take_turn(human_guess)
+
         if i%20==0:
             num_predictions.append(i)
             j = len(num_predictions)-1
@@ -92,15 +98,17 @@ expert_ema_results_john_temporal = [(i/(rounds*1.0)) for i in expert_ema_results
 cwt_results_john_temporal = [(i/(rounds*1.0)) for i in cwt_results_john_temporal]
 perceptron_results_john_temporal = [(i/(rounds*1.0)) for i in perceptron_results_john_temporal]
 
+
+
 # Fin data round
 for r in xrange(rounds):
     # Performance of bots
     shannon_bot = MindReader()
     hagel_bot = SEER()
-    expert_bot = ExpertsCombo([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)])
-    expert_ema_bot = ExpertsEMA([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)], 0.9)
-    cwt_bot = CWT_Expert(10,2)
-    perc_bot = Perceptron(10,0.5)
+    expert_bot = ExpertsCombo([MindReader(), SEER(), CWT_Expert(3, 5), Perceptron(3, 0.1)])
+    expert_ema_bot = ExpertsEMA([MindReader(), SEER(), CWT_Expert(3, 5), Perceptron(3, 0.1)], 0.9)
+    cwt_bot = CWT_Expert(10, 2)
+    perc_bot = Perceptron(10, 0.5)
     for human_guess in fin_data:
         shannon_bot.take_turn(human_guess)
         hagel_bot.take_turn(human_guess)
@@ -108,12 +116,12 @@ for r in xrange(rounds):
         expert_ema_bot.take_turn(human_guess)
         cwt_bot.take_turn(human_guess)
         perc_bot.take_turn(human_guess)
-    shannon_results_fin.append(shannon_bot.computer_score / (1.0 + len(fin_data)))
-    hagel_results_fin.append(hagel_bot.computer_score / (1.0 + len(fin_data)))
-    expert_results_fin.append(expert_bot.computer_score / (1.0 + len(fin_data)))
-    expert_ema_results_fin.append(expert_ema_bot.computer_score / (1.0 + len(fin_data)))
-    cwt_results_fin.append(cwt_bot.computer_score/(1.0*len(fin_data)))
-    perceptron_results_fin.append(perc_bot.computer_score/(1.0*len(fin_data)))
+    shannon_results_fin.append(shannon_bot.computer_score / (1.0 * len(fin_data)))
+    hagel_results_fin.append(hagel_bot.computer_score / (1.0 * len(fin_data)))
+    expert_results_fin.append(expert_bot.computer_score / (1.0 * len(fin_data)))
+    expert_ema_results_fin.append(expert_ema_bot.computer_score / (1.0 * len(fin_data)))
+    cwt_results_fin.append(cwt_bot.computer_score / (1.0 * len(fin_data)))
+    perceptron_results_fin.append(perc_bot.computer_score / (1.0 * len(fin_data)))
 
 means_john = []
 means_john.append(np.mean(shannon_results_john))
@@ -130,8 +138,8 @@ stds_john.append(2 * np.std(shannon_results_john) / math.sqrt(rounds))
 stds_john.append(2 * np.std(hagel_results_john) / math.sqrt(rounds))
 stds_john.append(2 * np.std(expert_results_john) / math.sqrt(rounds))
 stds_john.append(2 * np.std(expert_ema_results_john) / math.sqrt(rounds))
-stds_john.append(2*np.std(cwt_results_john)/math.sqrt(rounds))
-stds_john.append(2*np.std(perceptron_results_john)/math.sqrt(rounds))
+stds_john.append(2 * np.std(cwt_results_john) / math.sqrt(rounds))
+stds_john.append(2 * np.std(perceptron_results_john) / math.sqrt(rounds))
 
 means_fin = []
 means_fin.append(np.mean(shannon_results_fin))
@@ -146,8 +154,8 @@ stds_fin.append(2 * np.std(shannon_results_fin) / math.sqrt(rounds))
 stds_fin.append(2 * np.std(hagel_results_fin) / math.sqrt(rounds))
 stds_fin.append(2 * np.std(expert_results_fin) / math.sqrt(rounds))
 stds_fin.append(2 * np.std(expert_ema_results_fin) / math.sqrt(rounds))
-stds_fin.append(2*np.std(cwt_results_fin)/math.sqrt(rounds))
-stds_fin.append(2*np.std(perceptron_results_fin)/math.sqrt(rounds))
+stds_fin.append(2 * np.std(cwt_results_fin) / math.sqrt(rounds))
+stds_fin.append(2 * np.std(perceptron_results_fin) / math.sqrt(rounds))
 
 
 # Plot bar graph of bot performance
@@ -171,11 +179,10 @@ def plot_bars():
     axes.set_xlim([-bar_width, nbots - 1 + 3 * bar_width])
 
     ax.set_ylabel('Score (computer score / total predictions)')
-
-
     ax.set_title('Bot sequence prediction scores (with 95% CI)')
     ax.set_xticks(ind + bar_width)
-    ax.set_xticklabels(('Shannon', 'Hagelbarger', 'Experts Combo', 'Experts Combo (EMA)','CWT','Perceptron'))
+    ax.set_xticklabels(('Shannon', 'Hagelbarger', 'Experts\nCombo',
+                        'Experts\n(EMA)', 'CWT', 'Perceptron'))
 
 
     ax.legend((rect_john[0], rect_fin[0]), ('John\'s Data', 'Daily SP500 Close Prices (Up/Down)'))
@@ -188,8 +195,8 @@ def plot_bars():
             ax.text(rect.get_x() + rect.get_width() / 2., 1.05 * height, "%.2f" %
                     height, ha='center', va='bottom')
 
-    auto_label(rect_john)
-    auto_label(rect_fin)
+        auto_label(rect_john)
+        auto_label(rect_fin)
 
     plt.show()
 

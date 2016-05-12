@@ -28,7 +28,7 @@ class CWT_Expert(object):
 
     def get_prediction(self):
         prob = self.tree.predict_bit_probability(self.context)
-        if random.random() <prob:
+        if random.random() >prob:
             return 0
         else:
             return 1
