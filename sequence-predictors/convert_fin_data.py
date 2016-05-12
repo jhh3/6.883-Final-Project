@@ -1,5 +1,5 @@
 # Read in fin data
-fin_data_path = "../data/sp500close.data"
+fin_data_path = "../data/nasdaq.data"
 with open(fin_data_path, 'r') as f:
     data = [float(e) for e in f.read().split(',')]
 

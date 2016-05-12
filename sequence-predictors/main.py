@@ -32,16 +32,16 @@ for r in xrange(rounds):
     shannon_bot = MindReader()
     hagel_bot = SEER()
     expert_bot = ExpertsCombo([MindReader(), SEER()])
-    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.9)
+    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.7)
     for human_guess in data:
         shannon_bot.take_turn(human_guess)
         hagel_bot.take_turn(human_guess)
         expert_bot.take_turn(human_guess)
         expert_ema_bot.take_turn(human_guess)
-    shannon_results_john.append(shannon_bot.computer_score / (1.0 + len(data)))
-    hagel_results_john.append(hagel_bot.computer_score / (1.0 + len(data)))
-    expert_results_john.append(expert_bot.computer_score / (1.0 + len(data)))
-    expert_ema_results_john.append(expert_ema_bot.computer_score / (1.0 + len(data)))
+    shannon_results_john.append(shannon_bot.computer_score / (1.0 * len(data)))
+    hagel_results_john.append(hagel_bot.computer_score / (1.0 * len(data)))
+    expert_results_john.append(expert_bot.computer_score / (1.0 * len(data)))
+    expert_ema_results_john.append(expert_ema_bot.computer_score / (1.0 * len(data)))
 
 # Fin data round
 for r in xrange(rounds):
@@ -49,16 +49,16 @@ for r in xrange(rounds):
     shannon_bot = MindReader()
     hagel_bot = SEER()
     expert_bot = ExpertsCombo([MindReader(), SEER()])
-    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.9)
+    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.7)
     for human_guess in fin_data:
         shannon_bot.take_turn(human_guess)
         hagel_bot.take_turn(human_guess)
         expert_bot.take_turn(human_guess)
         expert_ema_bot.take_turn(human_guess)
-    shannon_results_fin.append(shannon_bot.computer_score / (1.0 + len(data)))
-    hagel_results_fin.append(hagel_bot.computer_score / (1.0 + len(data)))
-    expert_results_fin.append(expert_bot.computer_score / (1.0 + len(data)))
-    expert_ema_results_fin.append(expert_ema_bot.computer_score / (1.0 + len(data)))
+    shannon_results_fin.append(shannon_bot.computer_score / (1.0 * len(fin_data)))
+    hagel_results_fin.append(hagel_bot.computer_score / (1.0 * len(fin_data)))
+    expert_results_fin.append(expert_bot.computer_score / (1.0 * len(fin_data)))
+    expert_ema_results_fin.append(expert_ema_bot.computer_score / (1.0 * len(fin_data)))
 
 means_john = []
 means_john.append(np.mean(shannon_results_john))
