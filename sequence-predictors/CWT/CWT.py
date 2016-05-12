@@ -10,10 +10,10 @@ class CWT_Expert(object):
     def __init__(self,depth,alpha):
         self.depth = depth
         self.tree = CWT(depth,alpha)
-        self.prediction = self.flip();
         #self.last_prediction = 0;
         self.computer_score = self.player_score = 0
         self.context = [];
+        self.prediction = self.get_prediction();
 
     def take_turn(self,player_choice):
         if player_choice == self.prediction:
@@ -28,7 +28,7 @@ class CWT_Expert(object):
 
     def get_prediction(self):
         prob = self.tree.predict_bit_probability(self.context)
-        if random.random() >prob:
+        if random.random() <prob:
             return 0
         else:
             return 1
@@ -122,17 +122,13 @@ class CWT():
 ######################## USE CASES ###########################
 ##depth = 5;
 ##alpha = 5
-##CWT_new = CWT(depth,alpha)
-##context = []
+##CWT_new = CWT_Expert(depth,alpha)
 ##
 ##
 ##while True:
 ##    bit = int(raw_input("please enter number :  "))
-##    CWT_new.add_bit(bit, context)
-##    context.append(bit)
-##    context = context[-5:]
-##    prob = CWT_new.predict_bit_probability(context)
-##    print prob
+##    print CWT_new.prediction
+##    CWT_new.take_turn(bit)
 
 
 ## evaluating losses

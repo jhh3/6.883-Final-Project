@@ -37,7 +37,19 @@ expert_ema_results_fin = []
 cwt_results_fin = []
 perceptron_results_fin = []
 
+
+
+interval = 20
+num_predictions = []
+shannon_results_john_temporal = [0]*int(1.0*len(data)/interval+1)
+hagel_results_john_temporal = [0]*int(1.0*len(data)/interval+1)
+expert_results_john_temporal = [0]*int(1.0*len(data)/interval+1)
+expert_ema_results_john_temporal = [0]*int(1.0*len(data)/interval+1)
+cwt_results_john_temporal = [0]*int(1.0*len(data)/interval+1)
+perceptron_results_john_temporal = [0]*int(1.0*len(data)/interval+1)
+
 # Human (John) data round
+
 for r in xrange(rounds):
     # Performance of bots
     shannon_bot = MindReader()
@@ -47,6 +59,8 @@ for r in xrange(rounds):
     
     expert_bot = ExpertsCombo([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)])
     expert_ema_bot = ExpertsEMA([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)], 0.9)
+    i = 0
+    num_predictions = []
     for human_guess in data:
         shannon_bot.take_turn(human_guess)
         hagel_bot.take_turn(human_guess)
@@ -54,13 +68,29 @@ for r in xrange(rounds):
         expert_ema_bot.take_turn(human_guess)
         cwt_bot.take_turn(human_guess)
         perc_bot.take_turn(human_guess)
+        if i%20==0:
+            num_predictions.append(i)
+            j = len(num_predictions)-1
+            shannon_results_john_temporal[j] +=(shannon_bot.computer_score/(1.0+i))
+            hagel_results_john_temporal[j] += (hagel_bot.computer_score/(1.0+i))
+            expert_results_john_temporal[j] += (expert_bot.computer_score/(1.0+i))
+            expert_ema_results_john_temporal[j] += (expert_ema_bot.computer_score/(1.0+i))
+            cwt_results_john_temporal[j] += (cwt_bot.computer_score/(1.0+i))
+            perceptron_results_john_temporal[j] += perc_bot.computer_score/(1.0+i)
+        i+=1
     shannon_results_john.append(shannon_bot.computer_score / (1.0 + len(data)))
     hagel_results_john.append(hagel_bot.computer_score / (1.0 + len(data)))
     expert_results_john.append(expert_bot.computer_score / (1.0 + len(data)))
     expert_ema_results_john.append(expert_ema_bot.computer_score / (1.0 + len(data)))
     cwt_results_john.append(cwt_bot.computer_score/(1.0 +len(data)))
     perceptron_results_john.append(perc_bot.computer_score/(1.0+len(data)))
-
+    
+shannon_results_john_temporal = [(i/(rounds*1.0)) for i in shannon_results_john_temporal]
+hagel_results_john_temporal = [(i/(rounds*1.0)) for i in hagel_results_john_temporal]
+expert_results_john_temporal = [(i/(rounds*1.0)) for i in expert_results_john_temporal]
+expert_ema_results_john_temporal = [(i/(rounds*1.0)) for i in expert_ema_results_john_temporal]
+cwt_results_john_temporal = [(i/(rounds*1.0)) for i in cwt_results_john_temporal]
+perceptron_results_john_temporal = [(i/(rounds*1.0)) for i in perceptron_results_john_temporal]
 
 # Fin data round
 for r in xrange(rounds):
@@ -121,47 +151,51 @@ stds_fin.append(2*np.std(perceptron_results_fin)/math.sqrt(rounds))
 
 
 # Plot bar graph of bot performance
-nbots = 6
-ind = np.arange(nbots)
-bar_width = 0.35
 
-fig, ax = plt.subplots()
+def plot_bars():
+    plt.clf()
+    nbots = 6
+    ind = np.arange(nbots)
+    bar_width = 0.35
 
-rect_john = ax.bar(ind, means_john, bar_width, color='MediumSlateBlue',
-                   yerr=stds_john, error_kw={'ecolor': 'Tomato', 'linewidth': 2})
+    fig, ax = plt.subplots()
 
-rect_fin = ax.bar(ind + bar_width, means_fin, bar_width, color='y', yerr=stds_fin,
-                  error_kw={'ecolor': 'b', 'linewidth': 2})
+    rect_john = ax.bar(ind, means_john, bar_width, color='MediumSlateBlue',
+                       yerr=stds_john, error_kw={'ecolor': 'Tomato', 'linewidth': 2})
 
-axes = plt.gca()
-axes.set_ylim([0, 1.1])
-axes.set_xlim([-bar_width, nbots - 1 + 3 * bar_width])
+    rect_fin = ax.bar(ind + bar_width, means_fin, bar_width, color='y', yerr=stds_fin,
+                      error_kw={'ecolor': 'b', 'linewidth': 2})
 
-ax.set_ylabel('Score (computer score / total predictions)')
+    axes = plt.gca()
+    axes.set_ylim([0, 1.1])
+    axes.set_xlim([-bar_width, nbots - 1 + 3 * bar_width])
 
-
-ax.set_title('Bot sequence prediction scores (with 95% CI)')
-ax.set_xticks(ind + bar_width)
-ax.set_xticklabels(('Shannon', 'Hagelbarger', 'Experts Combo', 'Experts Combo (EMA)','CWT','Perceptron'))
+    ax.set_ylabel('Score (computer score / total predictions)')
 
 
-ax.legend((rect_john[0], rect_fin[0]), ('John\'s Data', 'Daily SP500 Close Prices (Up/Down)'))
+    ax.set_title('Bot sequence prediction scores (with 95% CI)')
+    ax.set_xticks(ind + bar_width)
+    ax.set_xticklabels(('Shannon', 'Hagelbarger', 'Experts Combo', 'Experts Combo (EMA)','CWT','Perceptron'))
 
 
-def auto_label(rects):
-    """Label bars"""
-    for rect in rects:
-        height = rect.get_height()
-        ax.text(rect.get_x() + rect.get_width() / 2., 1.05 * height, "%.2f" %
-                height, ha='center', va='bottom')
-
-auto_label(rect_john)
-auto_label(rect_fin)
-
-plt.show()
+    ax.legend((rect_john[0], rect_fin[0]), ('John\'s Data', 'Daily SP500 Close Prices (Up/Down)'))
 
 
+    def auto_label(rects):
+        """Label bars"""
+        for rect in rects:
+            height = rect.get_height()
+            ax.text(rect.get_x() + rect.get_width() / 2., 1.05 * height, "%.2f" %
+                    height, ha='center', va='bottom')
 
-    
-    
+    auto_label(rect_john)
+    auto_label(rect_fin)
+
+    plt.show()
+
+def plot_temporal():
+    plt.clf()
+
+    plt.plot(num_predictions,shannon_results_john_temporal,num_predictions,hagel_results_john_temporal,num_predictions,expert_results_john_temporal,num_predictions,expert_ema_results_john_temporal,num_predictions,cwt_results_john_temporal,num_predictions,perceptron_results_john_temporal)
+    plt.show()
 
