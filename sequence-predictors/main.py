@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import random
 
 # Read in data
+saya_data_path = "../data/saya_data.txt"
 john_data_path = "../data/john.data"
 john_text_path = "../data/text_data.txt"
 fin_data_path = "../data/sp500close01.data"
@@ -44,9 +45,8 @@ for r in xrange(rounds):
     cwt_bot = CWT_Expert(3,5)
     perc_bot = Perceptron(3,0.1)
     
-    expert_bot = ExpertsCombo([MindReader(), SEER()])
-    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.8)
-    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.9)
+    expert_bot = ExpertsCombo([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)])
+    expert_ema_bot = ExpertsEMA([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)], 0.9)
     for human_guess in data:
         shannon_bot.take_turn(human_guess)
         hagel_bot.take_turn(human_guess)
@@ -67,8 +67,8 @@ for r in xrange(rounds):
     # Performance of bots
     shannon_bot = MindReader()
     hagel_bot = SEER()
-    expert_bot = ExpertsCombo([MindReader(), SEER()])
-    expert_ema_bot = ExpertsEMA([MindReader(), SEER()], 0.9)
+    expert_bot = ExpertsCombo([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)])
+    expert_ema_bot = ExpertsEMA([MindReader(), SEER(), CWT_Expert(3,5), Perceptron(3,0.1)], 0.9)
     cwt_bot = CWT_Expert(10,2)
     perc_bot = Perceptron(10,0.5)
     for human_guess in fin_data:
