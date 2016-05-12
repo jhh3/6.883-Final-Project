@@ -13,7 +13,7 @@ class CWT_Expert(object):
         #self.last_prediction = 0;
         self.computer_score = self.player_score = 0
         self.context = [];
-        self.prediction = self.get_prediction();
+        self.prediction = self.flip();
 
     def take_turn(self,player_choice):
         if player_choice == self.prediction:
@@ -21,14 +21,15 @@ class CWT_Expert(object):
         else:
             self.player_score +=1
 
+        
+        self.tree.add_bit(player_choice,self.context)
         self.context.append(player_choice)
         self.context = self.context[-self.depth:]
-        self.tree.add_bit(player_choice,self.context)
         self.prediction = self.get_prediction();
 
     def get_prediction(self):
         prob = self.tree.predict_bit_probability(self.context)
-        if random.random() >prob:
+        if random.random() <prob:
             return 0
         else:
             return 1
